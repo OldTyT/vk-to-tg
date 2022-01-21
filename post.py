@@ -10,7 +10,6 @@ bot=telebot.TeleBot(TOKEN_TG_BOT, parse_mode='HTML')
 
 db = SQLighter('posts.db')
 
-
 def write_json(data, filename):
     with open(filename, 'w') as file:
         json.dump(data, file, indent=2, ensure_ascii=False)
@@ -18,6 +17,7 @@ def write_json(data, filename):
 def main():
     while True:
         for group in vk_group:
+            print(f'Current group - {group}')
             jsonWallGet = requests.get(url="https://api.vk.com/method/wall.get", params={
                 "owner_id": group,
                 "count": count_wallGet,
@@ -27,7 +27,8 @@ def main():
                 "v": VK_API_V}).json()
             for post in jsonWallGet['response']['items']:
                 text = edit_text(post)
-                if (not (db.post_exists(post['owner_id']))):
+                if not db.post_exists(f"{post['owner_id']}_{post['id']}"):
+                    print('kringe')
                     db.add_post(post['id'], post['owner_id'], text, f"{post['owner_id']}_{post['id']}", None)
                     if "attachments" in post.keys():
                         if len(post["attachments"]) == 1: #Если 1 элемент
@@ -40,6 +41,9 @@ def main():
                     else:
                         if text != '':
                             bot.send_message(CHANEL_ID, text)
+                    print("kd poshlo")
+                    time.sleep(tSleep_post)
+                    print("kd yshlo")
             time.sleep(tSleep_for)
         time.sleep(tSleep)
 
