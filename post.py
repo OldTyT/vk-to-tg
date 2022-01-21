@@ -3,6 +3,7 @@ from sqlighter import SQLighter
 from config import *
 import requests
 import telebot
+import time
 import json
 
 bot=telebot.TeleBot(TOKEN_TG_BOT, parse_mode='HTML')
@@ -39,6 +40,8 @@ def main():
                     else:
                         if text != '':
                             bot.send_message(CHANEL_ID, text)
+            time.sleep(tSleep_for)
+        time.sleep(tSleep)
 
 def edit_text(post):
     text = post['text']
