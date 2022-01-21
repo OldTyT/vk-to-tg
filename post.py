@@ -1,14 +1,11 @@
-import telebot
 from telebot.types import InputMediaAudio, InputMediaPhoto, InputMediaDocument
-import requests
-import json
 from sqlighter import SQLighter
 from config import *
-import logging
+import requests
+import telebot
+import json
 
 bot=telebot.TeleBot(TOKEN_TG_BOT, parse_mode='HTML')
-
-logging.basicConfig(level=logging.INFO)
 
 db = SQLighter('posts.db')
 
@@ -71,20 +68,17 @@ def media_create(post, text):
     for type in post:
         if type['type'] == 'photo':
             if media == []:
-                media.append(
-                    InputMediaPhoto(type['photo']['sizes'][-1]['url'], caption=text))
+                media.append(InputMediaPhoto(type['photo']['sizes'][-1]['url'], caption=text))
             else:
                 media.append(InputMediaPhoto(type['photo']['sizes'][-1]['url']))
         if type['type'] == 'audio':
             if media == []:
-                media.append(
-                    InputMediaAudio(type['audio']['url'], caption=text))
+                media.append(InputMediaAudio(type['audio']['url'], caption=text))
             else:
                 media.append(InputMediaAudio(type['audio']['url']))
         if type['type'] == 'doc':
             if media == []:
-                media.append(
-                    InputMediaDocument(type['doc']['url'], caption=text))
+                media.append(InputMediaDocument(type['doc']['url'], caption=text))
             else:
                 media.append(InputMediaDocument(type['doc']['url']))
         media.append(text)
